@@ -1,10 +1,11 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Avatar, Typography, Space } from 'antd';
 import { ShoppingCartOutlined, FileTextOutlined, UserOutlined, LockOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; // Giả định bạn có AuthContext
 
 const { Sider } = Layout;
+const { Text } = Typography;
 
 const menuItems = [
     {
@@ -31,6 +32,8 @@ const menuItems = [
 
 const Sidebar = () => {
     const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
+    const location = useLocation();
+    const { user } = useAuth(); // Lấy thông tin user từ AuthContext
 
     useEffect(() => {
         const handleResize = () => {
@@ -40,8 +43,6 @@ const Sidebar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const location = useLocation();
-
     const getSelectedKey = (path) => {
         if (path.startsWith('/cart')) return 'cart';
         if (path.startsWith('/orders')) return 'orders';
@@ -50,6 +51,9 @@ const Sidebar = () => {
         return '';
     };
 
+    const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL;
+    const avatarUrl = user?.avatar ? `${UPLOADS_URL}/${user.avatar}` : null;
+
     return (
         <Sider
             collapsible
@@ -57,14 +61,30 @@ const Sidebar = () => {
             onCollapse={(value) => setCollapsed(value)}
             width={200}
             collapsedWidth={80}
-            style={{ backgroundColor: '#fff' }}
             theme="light"
             trigger={
-                <div style={{ backgroundColor: '#fff', textAlign: 'center', padding: 4 }}>
+                <div style={{ textAlign: 'center', padding: 4 }}>
                     {collapsed ? <RightOutlined /> : <LeftOutlined />}
                 </div>
             }
         >
+            {/* Phần hiển thị tên và avatar của user */}
+            <div style={{ padding: collapsed ? '16px 8px' : '16px', textAlign: 'center' }}>
+                <Space direction="vertical" align="center">
+                    <Avatar
+                        size={collapsed ? 40 : 64}
+                        src={avatarUrl}
+                        icon={<UserOutlined />}
+                        style={{ marginBottom: 8 }}
+                    />
+                    {!collapsed && (
+                        <Text strong style={{ fontSize: 16 }}>
+                            {user?.name || 'User'}
+                        </Text>
+                    )}
+                </Space>
+            </div>
+
             <Menu
                 mode="inline"
                 theme="light"

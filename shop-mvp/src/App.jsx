@@ -19,9 +19,9 @@ import ProductManagement from './pages/admin/ProductManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import Register from './pages/user/Register';
 import ChangePassword from './pages/user/ChangePassword';
+import ForgotPassword from './pages/user/ForgotPassword';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
-import ForgotPassword from './pages/user/ForgotPassword';
 
 const { Content, Header: AntHeader, Footer: AntFooter } = Layout;
 
@@ -31,13 +31,13 @@ const MainLayout = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <AntHeader style={{ padding: 0 }}>
         {isAdminRoute ? <AdminHeader /> : <Header />}
       </AntHeader>
-      <div className="ant-wrapper">
-        <Outlet /> {/* Render các route con */}
-      </div>
+      <Layout>
+        <Outlet />
+      </Layout>
       <AntFooter style={{ textAlign: 'center' }}>
         <Footer />
       </AntFooter>
@@ -48,8 +48,8 @@ const MainLayout = () => {
 // Layout cho các trang user không có Sidebar
 const HomeLayout = ({ children }) => (
   <Layout>
-
-    <Content style={{ padding: 24 }}>
+    {/* <div style={{ width: 200 }} /> Placeholder cho Sidebar */}
+    <Content style={{ padding: 24, minHeight: 'calc(100vh - 64px - 70px)' }}>
       {children}
     </Content>
   </Layout>
@@ -57,9 +57,9 @@ const HomeLayout = ({ children }) => (
 
 // Layout cho các trang user có Sidebar
 const UserLayout = ({ children }) => (
-  <Layout>
-    <Sidebar /> {/* Sidebar có width mặc định là 200px */}
-    <Content style={{ padding: 24 }}>
+  <Layout hasSider>
+    <Sidebar />
+    <Content style={{ padding: 24, minHeight: 'calc(100vh - 64px - 70px)' }}>
       {children}
     </Content>
   </Layout>
@@ -67,9 +67,9 @@ const UserLayout = ({ children }) => (
 
 // Layout cho các trang admin
 const AdminLayout = ({ children }) => (
-  <Layout>
+  <Layout hasSider>
     <AdminSidebar />
-    <Content style={{ padding: 24 }}>
+    <Content style={{ padding: 24, minHeight: 'calc(100vh - 64px - 70px)' }}>
       {children}
     </Content>
   </Layout>
@@ -80,14 +80,10 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Routes>
-          {/* Sử dụng MainLayout làm layout cấp cao */}
           <Route element={<MainLayout />}>
-            {/* Public Routes - Không cần đăng nhập */}
             <Route path="/" element={<HomeLayout><Home /></HomeLayout>} />
             <Route path="/products" element={<HomeLayout><ProductList /></HomeLayout>} />
             <Route path="/products/:id" element={<UserLayout><ProductDetail /></UserLayout>} />
-
-            {/* Protected Routes - Yêu cầu đăng nhập */}
             <Route
               path="/cart"
               element={
@@ -128,8 +124,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
-            {/* Admin Routes - Yêu cầu đăng nhập và vai trò ADMIN */}
             <Route
               path="/admin"
               element={
@@ -171,13 +165,9 @@ function App() {
               }
             />
           </Route>
-
-          {/* Các route không cần layout (như login/register) */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          {/* Redirect to Home for unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </CartProvider>
