@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd';
-import { ShoppingCartOutlined, FileTextOutlined, UserOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, FileTextOutlined, UserOutlined, LockOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -10,17 +10,22 @@ const menuItems = [
     {
         key: 'cart',
         icon: <ShoppingCartOutlined />,
-        label: <Link to="/cart">Cart</Link>,
+        label: <Link to="/cart">Giỏ hàng</Link>,
     },
     {
         key: 'orders',
         icon: <FileTextOutlined />,
-        label: <Link to="/orders">Orders</Link>,
+        label: <Link to="/orders">Đơn hàng</Link>,
     },
     {
         key: 'profile',
         icon: <UserOutlined />,
-        label: <Link to="/profile">Profile</Link>,
+        label: <Link to="/profile">Hồ sơ</Link>,
+    },
+    {
+        key: 'change-password',
+        icon: <LockOutlined />,
+        label: <Link to="/change-password">Đổi mật khẩu</Link>,
     },
 ];
 
@@ -35,13 +40,13 @@ const Sidebar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-
     const location = useLocation();
 
     const getSelectedKey = (path) => {
         if (path.startsWith('/cart')) return 'cart';
         if (path.startsWith('/orders')) return 'orders';
         if (path.startsWith('/profile')) return 'profile';
+        if (path.startsWith('/change-password')) return 'change-password';
         return '';
     };
 
@@ -56,15 +61,10 @@ const Sidebar = () => {
             theme="light"
             trigger={
                 <div style={{ backgroundColor: '#fff', textAlign: 'center', padding: 4 }}>
-                    {collapsed ? (
-                        <RightOutlined />
-                    ) : (
-                        <LeftOutlined />
-                    )}
+                    {collapsed ? <RightOutlined /> : <LeftOutlined />}
                 </div>
             }
         >
-
             <Menu
                 mode="inline"
                 theme="light"

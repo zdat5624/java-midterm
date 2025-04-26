@@ -1,24 +1,19 @@
-import { Layout, Dropdown, Avatar, Drawer, Button, Menu } from 'antd';
-import { UserOutlined, MenuOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Layout, Dropdown, Avatar, Drawer, Button, Menu, Modal } from 'antd';
+import { UserOutlined, MenuOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Header } = Layout;
 
-const adminMenuItems = [
-    {
-        key: '1',
-        label: <Link to="/">Go to Home</Link>,
-    },
-    {
-        key: '2',
-        label: <Link to="/logout">Logout</Link>,
-    },
-];
+const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL;
 
 const AdminHeader = () => {
+    const navigate = useNavigate();
+    const { user, logout } = useAuth();
     const [drawerVisible, setDrawerVisible] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -36,40 +31,94 @@ const AdminHeader = () => {
         setDrawerVisible(false);
     };
 
-    return (
-        <Header style={{ backgroundColor: '#fff' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Link to="/admin" style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                    Admin
-                </Link>
+    const showLogoutModal = () => {
+        setModalVisible(true);
+    };
 
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {isMobile ? (
-                        <>
-                            <Button
-                                type="link"
-                                icon={<MenuOutlined />}
-                                onClick={showDrawer}
-                                style={{ marginRight: 8 }}
-                            />
-                            <Drawer
-                                title="Menu"
-                                placement="right"
-                                onClose={onClose}
-                                open={drawerVisible}
-                                bodyStyle={{ padding: 0 }}
-                            >
-                                <Menu mode="inline" theme="light" items={adminMenuItems} />
-                            </Drawer>
-                        </>
-                    ) : (
-                        <Dropdown menu={{ items: adminMenuItems }} trigger={['click']}>
-                            <Avatar icon={<UserOutlined />} className="cursor-pointer" />
-                        </Dropdown>
-                    )}
+    const handleLogout = () => {
+        logout(); // Gọi logout từ AuthContext
+        setModalVisible(false);
+        navigate('/');
+    };
+
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
+
+    const adminMenuItems = [
+        {
+            key: '1',
+            label: <Link to="/">Đến trang chủ</Link>,
+        },
+        {
+            key: '2',
+            label: <span onClick={showLogoutModal}>Đăng xuất</span>,
+        },
+    ];
+
+    const avatarUrl = user?.avatar ? `${UPLOADS_URL}/${user.avatar}` : null;
+
+    return (
+        <>
+            <Header style={{ backgroundColor: '#fff' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Link to="/admin" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                        ADMIN
+                    </Link>
+
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        {isMobile ? (
+                            <>
+                                <Button
+                                    type="link"
+                                    icon={<MenuOutlined />}
+                                    onClick={showDrawer}
+                                    style={{ marginRight: 8 }}
+                                />
+                                <Drawer
+                                    title="Menu"
+                                    placement="right"
+                                    onClose={onClose}
+                                    open={drawerVisible}
+                                    bodyStyle={{ padding: 0 }}
+                                >
+                                    <Menu mode="inline" theme="light" items={adminMenuItems} />
+                                </Drawer>
+                            </>
+                        ) : (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span>{user?.name || 'Admin'}</span>
+                                <Dropdown menu={{ items: adminMenuItems }} trigger={['click']}>
+                                    <Avatar
+                                        src={avatarUrl}
+                                        icon={!avatarUrl && <UserOutlined />}
+                                        className="cursor-pointer"
+                                    />
+                                </Dropdown>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </Header>
+            </Header>
+
+            <Modal
+                title={
+                    <div>
+                        <ExclamationCircleOutlined style={{ color: '#faad14', marginRight: 8 }} />
+                        Xác nhận đăng xuất
+                    </div>
+                }
+                open={modalVisible}
+                onOk={handleLogout}
+                onCancel={handleCancel}
+                okText="Đăng xuất"
+                cancelText="Hủy"
+                okButtonProps={{ danger: true }}
+            >
+                <p>Bạn có chắc chắn muốn đăng xuất không?</p>
+            </Modal>
+        </>
     );
 };
 
