@@ -63,7 +63,7 @@ const AdminHeader = () => {
             <Header style={{ backgroundColor: '#fff' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Link to="/admin" style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                        ADMIN
+                        Dashboard
                     </Link>
 
                     <div style={{ display: 'flex', alignItems: 'center' }}>

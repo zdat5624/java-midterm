@@ -8,11 +8,11 @@ import { useLocation } from 'react-router-dom';
 const { Sider } = Layout;
 
 const menuItems = [
-    {
-        key: 'dashboard',
-        icon: <DashboardOutlined />,
-        label: <Link to="/admin">Dashboard</Link>,
-    },
+    // {
+    //     key: 'dashboard',
+    //     icon: <DashboardOutlined />,
+    //     label: <Link to="/admin">Dashboard</Link>,
+    // },
     {
         key: 'users',
         icon: <UserOutlined />,
