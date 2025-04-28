@@ -8,9 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import vn.tdtu.shop.domain.Image;
 import vn.tdtu.shop.domain.Product;
+import vn.tdtu.shop.repository.CartItemRepository;
+import vn.tdtu.shop.repository.OrderItemRepository;
 import vn.tdtu.shop.repository.ProductRepository;
 import vn.tdtu.shop.util.request.ProductDTO;
 
@@ -18,8 +21,12 @@ import vn.tdtu.shop.util.request.ProductDTO;
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final CartItemRepository cartItemRepository;
+
     private final ProductRepository productRepository;
 
+    private final OrderItemRepository orderItemRepository;
+    
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(this::convertToDTO);
@@ -46,11 +53,17 @@ public class ProductService {
         return convertToDTO(updatedProduct);
     }
 
+    @Transactional 
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new EntityNotFoundException("Sản phẩm không tồn tại với ID: " + id);
         }
-        productRepository.deleteById(id);
+        // Xóa tất cả CartItem liên quan
+        this.cartItemRepository.deleteByProductId(id);
+        // Xóa tất cả OrderItem liên quan
+        this.orderItemRepository.deleteByProductId(id);
+        // Sau đó xóa Product
+        this.productRepository.deleteById(id);
     }
 
     public Page<ProductDTO> searchProducts(String category, String brand, String name, BigDecimal minPrice,

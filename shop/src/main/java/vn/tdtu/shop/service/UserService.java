@@ -3,12 +3,18 @@ package vn.tdtu.shop.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import vn.tdtu.shop.domain.Cart;
 import vn.tdtu.shop.domain.User;
+import vn.tdtu.shop.repository.CartRepository;
+import vn.tdtu.shop.repository.OrderRepository;
 import vn.tdtu.shop.repository.UserRepository;
 import vn.tdtu.shop.service.specification.UserSpecification;
 import vn.tdtu.shop.util.request.CreateUserDTO;
@@ -20,11 +26,13 @@ import vn.tdtu.shop.util.response.UserDTO;
 @Service
 public class UserService {
 
+	@Autowired
     private UserRepository userRepository;
+	@Autowired
+	private CartRepository cartRepository;
+	@Autowired
+	private OrderRepository orderRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public User handleCreateUser(CreateUserDTO createUserDTO) {
         User user = new User();
@@ -43,8 +51,29 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public void handleDeleteUser(long id) {
-        this.userRepository.deleteById(id);
+
+
+
+    
+    @Transactional
+    public void handleDeleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("Người dùng không tồn tại với ID: " + id);
+        }
+        // Kiểm tra xem người dùng có Order không
+        long orderCount = orderRepository.countByUserId(id);
+        if (orderCount > 0) {
+            throw new IllegalStateException("Không thể xóa người dùng vì họ có đơn hàng liên quan.");
+        }
+        // Tìm Cart của User
+        Cart cart = cartRepository.findByUserId(id)
+                .orElse(null);
+        if (cart != null) {
+            // Xóa Cart (các CartItem sẽ được xóa tự động do cascade = CascadeType.ALL)
+            cartRepository.delete(cart);
+        }
+        // Xóa User
+        userRepository.deleteById(id);
     }
 
     public User fetchUserById(long id) {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import vn.tdtu.shop.domain.Order;
@@ -35,4 +36,12 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
             "vn.tdtu.shop.util.constant.OrderStatus.DELIVERED) " +
             "GROUP BY MONTH(o.orderDate)")
     List<Object[]> getMonthlyRevenueForYear(int year);
+    
+    
+    @Modifying
+    @Query("DELETE FROM Order o WHERE o.user.id = :userId")
+    void deleteByUserId(Long userId);
+    
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId")
+    long countByUserId(Long userId);
 }

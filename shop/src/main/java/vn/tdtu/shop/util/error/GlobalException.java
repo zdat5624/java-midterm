@@ -36,7 +36,8 @@ public class GlobalException {
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
             BadCredentialsException.class,
-            InputInvalidException.class
+            InputInvalidException.class,
+            IllegalStateException.class
 
     })
     public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {

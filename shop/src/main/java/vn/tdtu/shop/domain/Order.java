@@ -1,5 +1,6 @@
 package vn.tdtu.shop.domain;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +48,24 @@ public class Order {
     @Column(nullable = false)
     private String receiverPhone;
 
+    @Column(nullable = false)
+    private String receiverName;
+
+    @Column(nullable = false)
+    private BigDecimal totalAmount;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> items = new ArrayList<>();
 
     @PrePersist
     public void handleBeforeCreate() {
         this.orderDate = Instant.now();
+        this.totalAmount = calculateTotalAmount();
+    }
+
+    private BigDecimal calculateTotalAmount() {
+        return items.stream()
+                .map(item -> item.getPrice().multiply(new BigDecimal(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

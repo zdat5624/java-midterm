@@ -26,6 +26,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public OrderDTO createOrder(CreateOrderRequest request) {
@@ -41,6 +42,7 @@ public class OrderService {
         order.setUser(user);
         order.setShippingAddress(request.getShippingAddress());
         order.setReceiverPhone(request.getReceiverPhone());
+        order.setReceiverName(request.getReceiverName());
         order.setStatus(OrderStatus.PENDING);
 
         cart.getItems().forEach(cartItem -> {
@@ -52,15 +54,26 @@ public class OrderService {
             order.getItems().add(orderItem);
         });
 
+        order.setTotalAmount(calculateTotalAmount(order));
+
+        // Lưu Order
         Order savedOrder = orderRepository.save(order);
 
-        // Xóa giỏ hàng sau khi tạo đơn hàng
+        // Cập nhật soldQuantity cho từng Product
+        for (OrderItem orderItem : order.getItems()) {
+            Product product = orderItem.getProduct();
+            product.setSoldQuantity(product.getSoldQuantity() + orderItem.getQuantity());
+            productRepository.save(product);
+        }
+
+        // Xóa tất cả CartItem trong giỏ hàng
+        cartItemRepository.deleteByCartId(cart.getId());
         cart.getItems().clear();
         cartRepository.save(cart);
 
         return mapToOrderDTO(savedOrder);
     }
-
+    
     public Page<OrderDTO> getUserOrders(Pageable pageable) {
         User user = getCurrentUser();
         return orderRepository.findByUserId(user.getId(), pageable)
@@ -103,9 +116,9 @@ public class OrderService {
     }
 
     public Page<OrderDTO> getAllOrders(Pageable pageable, OrderStatus status, Instant startDate, Instant endDate,
-            String receiverPhone, String email) {
+            String search) {
         return orderRepository.findAll(
-                OrderSpecification.filterOrders(status, startDate, endDate, receiverPhone, email),
+                OrderSpecification.filterOrders(status, startDate, endDate, search),
                 pageable).map(this::mapToOrderDTO);
     }
 
@@ -129,10 +142,11 @@ public class OrderService {
         orderDTO.setStatus(order.getStatus());
         orderDTO.setShippingAddress(order.getShippingAddress());
         orderDTO.setReceiverPhone(order.getReceiverPhone());
+        orderDTO.setReceiverName(order.getReceiverName());
         orderDTO.setItems(order.getItems().stream()
                 .map(this::mapToOrderItemDTO)
                 .collect(Collectors.toList()));
-        orderDTO.setTotalAmount(calculateTotalAmount(order));
+        orderDTO.setTotalAmount(order.getTotalAmount());
         return orderDTO;
     }
 

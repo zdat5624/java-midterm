@@ -64,8 +64,7 @@ public class OrderController {
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant endDate,
-            @RequestParam(required = false) String receiverPhone,
-            @RequestParam(required = false) String email) {
-        return ResponseEntity.ok(orderService.getAllOrders(pageable, status, startDate, endDate, receiverPhone, email));
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(orderService.getAllOrders(pageable, status, startDate, endDate, search));
     }
 }
