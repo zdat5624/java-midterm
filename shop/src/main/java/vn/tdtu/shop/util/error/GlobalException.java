@@ -23,15 +23,15 @@ import vn.tdtu.shop.util.response.RestResponse;
 public class GlobalException {
 
     // handle all exception
-    // @ExceptionHandler(Exception.class)
-    // public ResponseEntity<RestResponse<Object>> handleAllException(Exception ex)
-    // {
-    // RestResponse<Object> res = new RestResponse<Object>();
-    // res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    // res.setMessage(ex.getMessage());
-    // res.setError("Internal Server Error");
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
-    // }
+     @ExceptionHandler(Exception.class)
+     public ResponseEntity<RestResponse<Object>> handleAllException(Exception ex)
+     {
+	     RestResponse<Object> res = new RestResponse<Object>();
+	     res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+	     res.setMessage(ex.getMessage());
+	     res.setError("Internal Server Error");
+	     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+     }
 
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -17,6 +18,7 @@ import vn.tdtu.shop.repository.CartRepository;
 import vn.tdtu.shop.repository.OrderRepository;
 import vn.tdtu.shop.repository.UserRepository;
 import vn.tdtu.shop.service.specification.UserSpecification;
+import vn.tdtu.shop.util.error.InputInvalidException;
 import vn.tdtu.shop.util.request.CreateUserDTO;
 import vn.tdtu.shop.util.request.UpdateProfileDTO;
 import vn.tdtu.shop.util.request.UserFilterRequest;
@@ -26,13 +28,14 @@ import vn.tdtu.shop.util.response.UserDTO;
 @Service
 public class UserService {
 
-	@Autowired
+    @Autowired
     private UserRepository userRepository;
-	@Autowired
-	private CartRepository cartRepository;
-	@Autowired
-	private OrderRepository orderRepository;
-
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User handleCreateUser(CreateUserDTO createUserDTO) {
         User user = new User();
@@ -51,10 +54,6 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-
-
-
-    
     @Transactional
     public void handleDeleteUser(Long id) {
         if (!userRepository.existsById(id)) {
@@ -133,6 +132,18 @@ public class UserService {
                 UserSpecification.filterUsers(filter),
                 pageable);
         return userPage.map(this::convertToDTO);
+    }
+
+    public void changePassword(String email, String currentPassword, String newPassword) throws InputInvalidException {
+        User user = handleGetUserByUserName(email);
+        if (user == null) {
+            throw new InputInvalidException("Người dùng không tồn tại, vui lòng kiểm tra lại đăng nhập!");
+        }
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InputInvalidException("Mật khẩu hiện tại không đúng");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
     private UserDTO convertToDTO(User user) {

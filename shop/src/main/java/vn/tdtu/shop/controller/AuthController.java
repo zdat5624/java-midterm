@@ -20,6 +20,7 @@ import vn.tdtu.shop.util.SecurityUtil;
 import vn.tdtu.shop.util.annotation.ApiMessage;
 import vn.tdtu.shop.util.constant.RoleEnum;
 import vn.tdtu.shop.util.error.InputInvalidException;
+import vn.tdtu.shop.util.request.ChangePasswordRequest;
 import vn.tdtu.shop.util.request.EmailRequest;
 import vn.tdtu.shop.util.request.LoginDTO;
 import vn.tdtu.shop.util.request.RegisterDTO;
@@ -146,6 +147,16 @@ public class AuthController {
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request)
             throws InputInvalidException {
         forgotPasswordService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
+        return ResponseEntity.ok(null);
+    }
+
+    @ApiMessage("Đổi mật khẩu thành công")
+    @PostMapping("/api/auth/change-password")
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request)
+            throws InputInvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new InputInvalidException("Bạn cần đăng nhập để đổi mật khẩu"));
+        userService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());
         return ResponseEntity.ok(null);
     }
 
