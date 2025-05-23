@@ -70,4 +70,10 @@ public class ProductController {
         return ResponseEntity
                 .ok(productService.searchProducts(categoryId, brandId, name, minPrice, maxPrice, pageable));
     }
+    
+    @ApiMessage("Lấy danh sách sản phẩm tương tự thành công")
+    @GetMapping("/{id}/similar")
+    public ResponseEntity<Page<ProductDTO>> getSimilarProducts(@PathVariable Long id, Pageable pageable) {
+        return ResponseEntity.ok(productService.getSimilarProducts(id, pageable));
+    }
 }

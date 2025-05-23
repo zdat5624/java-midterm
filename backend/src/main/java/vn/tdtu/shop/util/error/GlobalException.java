@@ -35,7 +35,6 @@ public class GlobalException {
 
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
-            BadCredentialsException.class,
             InputInvalidException.class,
             IllegalStateException.class
 
@@ -47,16 +46,29 @@ public class GlobalException {
         res.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+    
+ // Handle BadCredentialsException with 401 Unauthorized
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<RestResponse<Object>> handleBadCredentialsException(BadCredentialsException ex) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        res.setError("Unauthorized");
+        res.setMessage("Tên đăng nhập hoặc mật khẩu không hợp lệ");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+    }
 
-    // @ExceptionHandler(AuthorizationDeniedException.class)
-    // public ResponseEntity<RestResponse<Object>>
-    // handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-    // RestResponse<Object> res = new RestResponse<>();
-    // res.setStatusCode(HttpStatus.FORBIDDEN.value());
-    // res.setError("FORBIDDEN");
-    // res.setMessage(ex.getMessage());
-    // return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
-    // }
+    @ExceptionHandler(value = {
+    		ForbiddenException.class,
+            PermissionException.class,
+            AuthorizationDeniedException.class
+    })
+    public ResponseEntity<RestResponse<Object>> handlePermissionException(Exception ex) {
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.FORBIDDEN.value());
+        res.setError("Forbidden");
+        res.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+    }
 
     @ExceptionHandler(value = {
             NoResourceFoundException.class,
@@ -86,16 +98,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
-    @ExceptionHandler(value = {
-            PermissionException.class,
-    })
-    public ResponseEntity<RestResponse<Object>> handlePermissionException(Exception ex) {
-        RestResponse<Object> res = new RestResponse<Object>();
-        res.setStatusCode(HttpStatus.FORBIDDEN.value());
-        res.setError("Forbidden");
-        res.setMessage(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
-    }
+   
 
     @ExceptionHandler(value = {
             StorageException.class,

@@ -10,6 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderSpecification {
+	public static Specification<Order> hasUserId(Long userId) {
+        return (root, query, criteriaBuilder) -> 
+            criteriaBuilder.equal(root.get("user").get("id"), userId);
+    }
+
+    public static Specification<Order> hasStatus(OrderStatus status) {
+        return (root, query, criteriaBuilder) -> 
+            criteriaBuilder.equal(root.get("status"), status);
+    }
 
     public static Specification<Order> filterOrders(OrderStatus status, Instant startDate, Instant endDate,
             String search) {

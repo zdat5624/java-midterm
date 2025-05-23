@@ -262,7 +262,13 @@ const OrderManagement = () => {
                 dataSource={orders}
                 rowKey="id"
                 loading={loading}
-                pagination={pagination}
+                pagination={{
+                    ...pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: pagination.pageSizeOptions,
+                    showTotal: (total, range) =>
+                        `Hiển thị ${range[0]}-${range[1]} trên ${total} đơn hàng`,
+                }}
                 onChange={handleTableChange}
                 expandable={{ expandedRowRender }}
                 scroll={{ x: true }}

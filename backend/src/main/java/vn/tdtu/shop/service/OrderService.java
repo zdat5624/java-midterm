@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.tdtu.shop.domain.*;
@@ -74,9 +75,13 @@ public class OrderService {
         return mapToOrderDTO(savedOrder);
     }
     
-    public Page<OrderDTO> getUserOrders(Pageable pageable) {
+    public Page<OrderDTO> getUserOrders(Pageable pageable, OrderStatus status) {
         User user = getCurrentUser();
-        return orderRepository.findByUserId(user.getId(), pageable)
+        Specification<Order> spec = Specification.where(OrderSpecification.hasUserId(user.getId()));
+        if (status != null) {
+            spec = spec.and(OrderSpecification.hasStatus(status));
+        }
+        return orderRepository.findAll(spec, pageable)
                 .map(this::mapToOrderDTO);
     }
 
@@ -107,7 +112,7 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Đơn hàng không tồn tại hoặc bạn không có quyền hủy"));
 
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new IllegalStateException("Chỉ có thể hủy đơn hàng ở trạng thái PENDING");
+            throw new IllegalStateException("Chỉ có thể hủy đơn hàng ở trạng thái đang chờ xác nhận");
         }
 
         order.setStatus(OrderStatus.CANCELLED);

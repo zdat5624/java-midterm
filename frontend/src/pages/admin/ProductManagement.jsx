@@ -310,9 +310,16 @@ const ProductManagement = () => {
                 dataSource={products}
                 rowKey="id"
                 loading={loading}
-                pagination={pagination}
+                pagination={{
+                    ...pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: pagination.pageSizeOptions,
+                    showTotal: (total, range) =>
+                        `Hiển thị ${range[0]}-${range[1]} trên ${total} sản phẩm`,
+                }}
                 onChange={handleTableChange}
                 scroll={{ x: true }}
+
             />
 
             {/* Modal chỉnh sửa sản phẩm */}

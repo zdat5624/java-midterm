@@ -34,4 +34,33 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                         @Param("minPrice") BigDecimal minPrice,
                         @Param("maxPrice") BigDecimal maxPrice,
                         Pageable pageable);
+        
+        @Query("SELECT p FROM Product p WHERE p.id != :productId AND " +
+                "p.category.id = :categoryId AND p.brand.id = :brandId " +
+                "ORDER BY p.views DESC")
+         Page<Product> findByCategoryAndBrand(
+                 @Param("productId") Long productId,
+                 @Param("categoryId") Long categoryId,
+                 @Param("brandId") Long brandId,
+                 Pageable pageable);
+
+         @Query("SELECT p FROM Product p WHERE p.id != :productId AND " +
+                "p.category.id = :categoryId AND p.brand.id != :brandId " +
+                "ORDER BY p.views DESC")
+         Page<Product> findByCategoryOnly(
+                 @Param("productId") Long productId,
+                 @Param("categoryId") Long categoryId,
+                 @Param("brandId") Long brandId,
+                 Pageable pageable);
+
+         @Query("SELECT p FROM Product p WHERE p.id != :productId AND " +
+                "p.brand.id = :brandId AND p.category.id != :categoryId " +
+                "ORDER BY p.views DESC")
+         Page<Product> findByBrandOnly(
+                 @Param("productId") Long productId,
+                 @Param("categoryId") Long categoryId,
+                 @Param("brandId") Long brandId,
+                 Pageable pageable);
+         @Query("SELECT p FROM Product p WHERE p.id != :productId ORDER BY p.views DESC")
+         Page<Product> findAllByIdNot(@Param("productId") Long productId, Pageable pageable);
 }

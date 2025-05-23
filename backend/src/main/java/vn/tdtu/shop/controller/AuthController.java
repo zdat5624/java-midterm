@@ -71,8 +71,10 @@ public class AuthController {
                     currentUserDB.getName(),
                     currentUserDB.getRole(),
                     currentUserDB.getAvatar(),
-                    currentUserDB.getGender(),
-                    currentUserDB.getPhone());
+                    currentUserDB.getGender(),         
+                    currentUserDB.getPhone(),
+                    currentUserDB.getAddress()
+                    );
             res.setUser(userLogin);
         }
 
@@ -98,6 +100,7 @@ public class AuthController {
             userLogin.setAvatar(currentUserDB.getAvatar());
             userLogin.setGender(currentUserDB.getGender());
             userLogin.setPhone(currentUserDB.getPhone());
+            userLogin.setAddress(currentUserDB.getAddress());
         }
 
         return ResponseEntity.ok().body(userLogin);

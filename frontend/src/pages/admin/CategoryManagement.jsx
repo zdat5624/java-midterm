@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Typography, Table, Button, message, Space, Tooltip, Modal } from 'antd';
-import { PlusOutlined, EyeOutlined, EditOutlined, DeleteOutlined, AppstoreOutlined, AppstoreAddOutlined } from '@ant-design/icons';
+import { PlusOutlined, EyeOutlined, EditOutlined, DeleteOutlined, AppstoreOutlined, AppstoreAddOutlined, TagsOutlined } from '@ant-design/icons';
 import axiosInstance from '../../api/axiosConfig';
 import CategoryDetailModal from '../../components/category/CategoryDetailModal';
 import CategoryEditModal from '../../components/category/CategoryEditModal';
@@ -143,7 +143,7 @@ const CategoryManagement = () => {
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <Title level={2} style={{ margin: 0 }}>
-                    <AppstoreAddOutlined className="mr-2" />Quản lý danh mục
+                    <TagsOutlined className="mr-2" />Quản lý danh mục
                 </Title>
                 <Button
                     type="primary"
@@ -159,7 +159,13 @@ const CategoryManagement = () => {
                 dataSource={categories}
                 rowKey="id"
                 loading={loading}
-                pagination={pagination}
+                pagination={{
+                    ...pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: pagination.pageSizeOptions,
+                    showTotal: (total, range) =>
+                        `Hiển thị ${range[0]}-${range[1]} trên ${total} danh mục`,
+                }}
                 onChange={handleTableChange}
                 scroll={{ x: true }}
             />

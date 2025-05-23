@@ -36,8 +36,10 @@ public class OrderController {
     @ApiMessage("Lấy danh sách đơn hàng của người dùng thành công")
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<Page<OrderDTO>> getUserOrders(Pageable pageable) {
-        return ResponseEntity.ok(orderService.getUserOrders(pageable));
+    public ResponseEntity<Page<OrderDTO>> getUserOrders(
+            Pageable pageable,
+            @RequestParam(required = false) OrderStatus status) {
+        return ResponseEntity.ok(orderService.getUserOrders(pageable, status));
     }
 
     @ApiMessage("Lấy thông tin chi tiết đơn hàng thành công")

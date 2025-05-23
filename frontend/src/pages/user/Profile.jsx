@@ -1,141 +1,259 @@
-import { Typography, Form, Input, Button, Select, message, Divider } from 'antd';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Typography, Form, Input, Button, Select, message, Upload, Avatar, Spin } from 'antd';
+import { BellOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import axiosInstance from '../../api/axiosConfig';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
 const Profile = () => {
-    const { token, isAuthenticated, user, setUser } = useAuth();
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
+    const { user, isAuthenticated, isLoading } = useAuth();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [fileList, setFileList] = useState([]);
+    const [avatarUrl, setAvatarUrl] = useState('');
+    const [newAvatar, setNewAvatar] = useState(null);
 
     useEffect(() => {
-        fetchUserProfile();
-    }, [isAuthenticated, token]);
+        if (isLoading) return;
 
-    const fetchUserProfile = async () => {
-        if (!isAuthenticated || !user?.id) {
-            setLoading(false);
+        if (!isAuthenticated || !user) {
+            navigate('/login');
             return;
         }
+
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axiosInstance.get(`/api/users/${user.id}`);
+                const userData = response.data.data;
+                form.setFieldsValue({
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone,
+                    gender: userData.gender,
+                    address: userData.address,
+                });
+                if (userData.avatar) {
+                    setAvatarUrl(`${import.meta.env.VITE_UPLOADS_URL}/${userData.avatar}`);
+                }
+            } catch (error) {
+                message.error('Không thể tải thông tin hồ sơ');
+                console.error('Error fetching user profile:', error);
+            }
+        };
+
+        fetchUserProfile();
+    }, [isAuthenticated, user, form, navigate, isLoading]);
+
+    const handleUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('files', file);
+
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.id}`, {
-                headers: token ? { Authorization: `Bearer ${token}` } : {},
-                withCredentials: true,
+            const response = await axiosInstance.post('/api/upload/img', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
-            const userData = response.data.data;
-            form.setFieldsValue({
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                gender: userData.gender,
-                address: userData.address,
-            });
-            setLoading(false);
+            if (response.data.statusCode === 201 && response.data.data.uploaded.length > 0) {
+                const uploadedFileName = response.data.data.uploaded[0];
+                setNewAvatar(uploadedFileName);
+                setAvatarUrl(`${import.meta.env.VITE_UPLOADS_URL}/${uploadedFileName}`);
+                return true;
+            } else {
+                message.error('Tải ảnh lên thất bại');
+                return false;
+            }
         } catch (error) {
-            console.log('Lỗi lấy thông tin:', error.response);
-            setLoading(false);
+            message.error('Đã xảy ra lỗi khi tải ảnh lên');
+            return false;
         }
     };
 
+    const handleChange = ({ file, fileList }) => {
+        setFileList(fileList);
+        if (file.status === 'done') {
+            setFileList([]);
+        }
+    };
+
+    const beforeUpload = (file) => {
+        const isImage = file.type.startsWith('image/');
+        if (!isImage) {
+            message.error('Vui lòng chọn file ảnh!');
+            return false;
+        }
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+            message.error('Ảnh phải nhỏ hơn 5MB!');
+            return false;
+        }
+        return true;
+    };
+
     const onFinish = async (values) => {
-        setSubmitting(true);
+        setLoading(true);
         try {
-            console.log('Dữ liệu gửi đi:', {
+            const updatedAvatar = newAvatar || (avatarUrl ? avatarUrl.split('/').pop() : 'avatar-default.webp');
+            const updateData = {
                 id: user.id,
                 name: values.name,
                 gender: values.gender,
                 phone: values.phone,
                 address: values.address,
-            });
+                avatar: updatedAvatar,
+            };
 
-            const response = await axios.put(
-                `${import.meta.env.VITE_API_URL}/api/users/update-profile`,
-                {
-                    id: user.id,
-                    name: values.name,
-                    gender: values.gender,
-                    phone: values.phone,
-                    address: values.address,
-                },
-                {
-                    headers: token ? { Authorization: `Bearer ${token}` } : {},
-                    withCredentials: true,
-                    timeout: 10000,
-                }
-            );
-
-            setUser((prevUser) => ({ ...prevUser, ...response.data.data }));
-            message.success('Cập nhật thông tin thành công!');
+            const response = await axiosInstance.put('/api/users/update-profile', updateData);
+            if (response.status === 200) {
+                message.success('Cập nhật hồ sơ thành công');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
         } catch (error) {
-            console.log('Lỗi cập nhật:', error.response || error.message);
-            message.success('Cập nhật thông tin thành công!');
+            message.error(error.response?.data?.message || 'Cập nhật hồ sơ thất bại');
         } finally {
-            setSubmitting(false);
+            setLoading(false);
         }
     };
 
-    if (loading) return <div>Đang tải...</div>;
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                <Spin tip="Đang kiểm tra xác thực..." size="large" />
+            </div>
+        );
+    }
 
     return (
-        <div style={{ padding: 24, background: '#f5f5f5' }}>
-            <Title level={2} style={{ textAlign: 'center', marginBottom: 24 }}>
-                Thông tin cá nhân
-            </Title>
-            <div style={{ maxWidth: 600, margin: '0 auto', background: '#fff', padding: 24, borderRadius: 8, boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+        <div className="flex justify-center min-h-screen bg-gray-100 py-4 px-4">
+            <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
+                <Title level={2} className="text-center text-gray-800 mb-6 flex items-center justify-center">
+                    <UserOutlined className="mr-2 " />
+                    Thông tin cá nhân
+                </Title>
                 <Form
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
+                    initialValues={{
+                        name: '',
+                        email: '',
+                        phone: '',
+                        gender: null,
+                        address: '',
+                    }}
+                    className="space-y-4"
                 >
+                    <Form.Item className="mb-4">
+                        <div className="flex justify-center">
+                            <div className="relative">
+                                {avatarUrl ? (
+                                    <Avatar
+                                        src={avatarUrl}
+                                        alt="Avatar"
+                                        size={120}
+                                        className="border-2 border-gray-200 rounded-full"
+                                    />
+                                ) : (
+                                    <Avatar
+                                        size={120}
+                                        icon={<UserOutlined />}
+                                        className="border-2 border-gray-200 rounded-full bg-gray-200"
+                                    />
+                                )}
+                                <Upload
+                                    fileList={fileList}
+                                    customRequest={({ file, onSuccess, onError }) => {
+                                        handleUpload(file).then((success) => {
+                                            if (success) {
+                                                onSuccess('ok');
+                                            } else {
+                                                onError('error');
+                                            }
+                                        });
+                                    }}
+                                    onChange={handleChange}
+                                    beforeUpload={beforeUpload}
+                                    accept="image/*"
+                                    showUploadList={false}
+                                >
+                                    <Button
+                                        title="Tải lên ảnh đại diện"
+                                        icon={<UploadOutlined />}
+                                        className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center border-none hover:bg-blue-700"
+                                    />
+                                </Upload>
+                            </div>
+                        </div>
+                    </Form.Item>
                     <Form.Item
-                        label={<Text strong>Tên</Text>}
+                        label="Tên"
                         name="name"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập tên' },
+                            { min: 5, message: 'Tên phải có ít nhất 5 ký tự' },
+                            { max: 50, message: 'Tên không được vượt quá 50 ký tự' },
+                        ]}
                     >
-                        <Input placeholder="Nhập tên của bạn" />
+                        <Input
+                            placeholder="Nhập tên của bạn"
+                            className="rounded-md border-gray-300 focus:border-blue-600"
+                        />
+                    </Form.Item>
+                    <Form.Item label="Email" name="email">
+                        <Input
+                            placeholder="Nhập email của bạn"
+                            disabled
+                            className="rounded-md border-gray-300 bg-gray-50"
+                        />
                     </Form.Item>
                     <Form.Item
-                        label={<Text strong>Email</Text>}
-                        name="email"
-                    >
-                        <Input placeholder="Nhập email của bạn" disabled />
-                    </Form.Item>
-                    <Form.Item
-                        label={<Text strong>Số điện thoại</Text>}
+                        label="Số điện thoại"
                         name="phone"
-                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập số điện thoại' },
+                            {
+                                pattern: /^(\+84|0)[0-9]{9,10}$/,
+                                message: 'Định dạng số điện thoại không hợp lệ',
+                            },
+                        ]}
                     >
-                        <Input placeholder="Nhập số điện thoại" />
+                        <Input
+                            placeholder="Nhập số điện thoại"
+                            className="rounded-md border-gray-300 focus:border-blue-600"
+                        />
                     </Form.Item>
                     <Form.Item
-                        label={<Text strong>Giới tính</Text>}
+                        label="Giới tính"
                         name="gender"
-                        rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
+                        rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
                     >
-                        <Select placeholder="Chọn giới tính">
+                        <Select
+                            placeholder="Chọn giới tính"
+                            className="rounded-md"
+                        >
                             <Option value="MALE">Nam</Option>
                             <Option value="FEMALE">Nữ</Option>
                             <Option value="OTHER">Khác</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        label={<Text strong>Địa chỉ</Text>}
-                        name="address"
-                        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
-                    >
-                        <Input placeholder="Nhập địa chỉ của bạn" />
+                    <Form.Item label="Địa chỉ" name="address">
+                        <Input
+                            placeholder="Nhập địa chỉ của bạn"
+                            className="rounded-md border-gray-300 focus:border-blue-600"
+                        />
                     </Form.Item>
-                    <Divider />
                     <Form.Item>
                         <Button
                             type="primary"
                             htmlType="submit"
-                            loading={submitting}
-                            block
+                            loading={loading}
+                            className="w-full bg-blue-600 hover:bg-blue-700 rounded-md h-10"
                         >
                             Lưu thay đổi
                         </Button>

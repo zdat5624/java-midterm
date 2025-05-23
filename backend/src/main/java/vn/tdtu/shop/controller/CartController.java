@@ -42,8 +42,8 @@ public class CartController {
     }
 
     @ApiMessage("Xóa sản phẩm khỏi giỏ hàng thành công")
-    @DeleteMapping("/items/{cartItemId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @DeleteMapping("/items/{cartItemId}")
     public ResponseEntity<CartDTO> removeCartItem(@PathVariable Long cartItemId) {
         return ResponseEntity.ok(cartService.removeCartItem(cartItemId));
     }

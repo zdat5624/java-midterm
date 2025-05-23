@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,49 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
 
         return convertToDTO(savedProduct);
+    }
+    
+    public Page<ProductDTO> getSimilarProducts(Long productId, Pageable pageable) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại với ID: " + productId));
+        
+        Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
+        Long brandId = product.getBrand() != null ? product.getBrand().getId() : null;
+
+        List<Product> similarProducts = new ArrayList<>();
+        int pageSize = pageable.getPageSize();
+
+        // 1. Lấy sản phẩm cùng danh mục và thương hiệu
+        Page<Product> sameCategoryAndBrand = productRepository.findByCategoryAndBrand(productId, categoryId, brandId, pageable);
+        similarProducts.addAll(sameCategoryAndBrand.getContent());
+
+        // 2. Nếu chưa đủ pageSize, lấy sản phẩm cùng danh mục, khác thương hiệu
+        if (similarProducts.size() < pageSize) {
+            Pageable remainingPageable = Pageable.ofSize(pageSize - similarProducts.size()).withPage(0);
+            Page<Product> sameCategoryOnly = productRepository.findByCategoryOnly(productId, categoryId, brandId, remainingPageable);
+            similarProducts.addAll(sameCategoryOnly.getContent());
+        }
+
+        // 3. Nếu vẫn chưa đủ pageSize, lấy sản phẩm cùng thương hiệu, khác danh mục
+        if (similarProducts.size() < pageSize) {
+            Pageable remainingPageable = Pageable.ofSize(pageSize - similarProducts.size()).withPage(0);
+            Page<Product> sameBrandOnly = productRepository.findByBrandOnly(productId, categoryId, brandId, remainingPageable);
+            similarProducts.addAll(sameBrandOnly.getContent());
+        }
+
+        // 4. Nếu vẫn chưa đủ pageSize, lấy ngẫu nhiên các sản phẩm khác
+        if (similarProducts.size() < pageSize) {
+            Pageable remainingPageable = Pageable.ofSize(pageSize - similarProducts.size()).withPage(0);
+            Page<Product> otherProducts = productRepository.findAllByIdNot(productId, remainingPageable);
+            similarProducts.addAll(otherProducts.getContent());
+        }
+
+        // Chuyển thành Page<ProductDTO>
+        List<ProductDTO> productDTOs = similarProducts.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(productDTOs, pageable, productDTOs.size());
     }
 
     private void mapToEntityForCreate(ProductRequestDTO dto, Product product) {

@@ -28,6 +28,7 @@ public class ResLoginDTO {
         private String avatar;
         private GenderEnum gender;
         private String phone;
+        private String address;
 
     }
 }

@@ -78,18 +78,22 @@ public class CartService {
 
         @Transactional
         public CartDTO removeCartItem(Long cartItemId) {
-                User user = getCurrentUser();
-                Cart cart = cartRepository.findByUserId(user.getId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Giỏ hàng không tồn tại"));
+            User user = getCurrentUser();
+            Cart cart = cartRepository.findByUserId(user.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Giỏ hàng không tồn tại"));
 
-                CartItem cartItem = cartItemRepository.findById(cartItemId)
-                                .filter(item -> item.getCart().getId().equals(cart.getId()))
-                                .orElseThrow(() -> new ResourceNotFoundException("Hàng không tồn tại trong giỏ"));
+            CartItem cartItem = cartItemRepository.findById(cartItemId)
+                    .filter(item -> item.getCart().getId().equals(cart.getId()))
+                    .orElseThrow(() -> new ResourceNotFoundException("Hàng không tồn tại trong giỏ"));
 
-                cart.getItems().remove(cartItem);
-                cartRepository.save(cart);
+            // Xóa CartItem 
+            cartItemRepository.delete(cartItem);
 
-                return mapToCartDTO(cart);
+            // Xóa CartItem khỏi danh sách items của Cart
+            cart.getItems().remove(cartItem);
+            cartRepository.save(cart);
+
+            return mapToCartDTO(cart);
         }
 
         @Transactional

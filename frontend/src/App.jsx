@@ -24,6 +24,8 @@ import { AuthProvider } from './pages/contexts/AuthContext';
 import { CartProvider } from './pages/contexts/CartContext';
 import CategoryManagement from './pages/admin/CategoryManagement';
 import BrandManagement from './pages/admin/BrandManagement';
+import Forbidden from './pages/Forbidden';
+import NotFound from './pages/NotFound';
 
 const { Content, Header: AntHeader, Footer: AntFooter } = Layout;
 
@@ -189,7 +191,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/forbidden" element={<Forbidden />} />
+          <Route path="*" element={<NotFound />} /> {/* Xử lý tất cả các route không khớp */}
         </Routes>
       </CartProvider>
     </AuthProvider>

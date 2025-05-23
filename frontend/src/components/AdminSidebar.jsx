@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd';
-import { DashboardOutlined, UserOutlined, ShoppingOutlined, FileTextOutlined, AppstoreOutlined, LeftOutlined, RightOutlined, ShopOutlined, TrademarkOutlined } from '@ant-design/icons';
+import { DashboardOutlined, UserOutlined, ShoppingOutlined, FileTextOutlined, AppstoreOutlined, LeftOutlined, RightOutlined, ShopOutlined, TrademarkOutlined, TagsOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -24,7 +24,7 @@ const menuItems = [
     },
     {
         key: 'categories',
-        icon: <AppstoreOutlined />,
+        icon: <TagsOutlined />,
         label: <Link to="/admin/categories">Danh mục</Link>,
     },
     {

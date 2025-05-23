@@ -15,7 +15,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     // Nếu có requiredRole, kiểm tra vai trò của người dùng
     if (requiredRole && user?.role !== requiredRole) {
         // Nếu không có quyền truy cập, điều hướng về trang chủ
-        return <Navigate to="/" replace />;
+        return <Navigate to="/forbiden" replace />;
     }
 
     // Nếu đã đăng nhập và có quyền (nếu cần), hiển thị nội dung trang
