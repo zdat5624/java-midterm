@@ -23,15 +23,14 @@ import vn.tdtu.shop.util.response.RestResponse;
 public class GlobalException {
 
     // handle all exception
-     @ExceptionHandler(Exception.class)
-     public ResponseEntity<RestResponse<Object>> handleAllException(Exception ex)
-     {
-	     RestResponse<Object> res = new RestResponse<Object>();
-	     res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-	     res.setMessage(ex.getMessage());
-	     res.setError("Internal Server Error");
-	     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
-     }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RestResponse<Object>> handleAllException(Exception ex) {
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        res.setMessage(ex.getMessage());
+        res.setError("Internal Server Error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+    }
 
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
@@ -46,8 +45,8 @@ public class GlobalException {
         res.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
-    
- // Handle BadCredentialsException with 401 Unauthorized
+
+    // Handle BadCredentialsException with 401 Unauthorized
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<RestResponse<Object>> handleBadCredentialsException(BadCredentialsException ex) {
         RestResponse<Object> res = new RestResponse<>();
@@ -58,7 +57,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler(value = {
-    		ForbiddenException.class,
+            ForbiddenException.class,
             PermissionException.class,
             AuthorizationDeniedException.class
     })
@@ -80,7 +79,7 @@ public class GlobalException {
         res.setStatusCode(HttpStatus.NOT_FOUND.value());
         res.setMessage(ex.getMessage());
         res.setError("404 Not Found");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -97,8 +96,6 @@ public class GlobalException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
-
-   
 
     @ExceptionHandler(value = {
             StorageException.class,

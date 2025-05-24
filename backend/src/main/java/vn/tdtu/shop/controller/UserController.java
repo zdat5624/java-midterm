@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,8 @@ import vn.tdtu.shop.util.constant.GenderEnum;
 import vn.tdtu.shop.util.constant.RoleEnum;
 import vn.tdtu.shop.util.error.ForbiddenException;
 import vn.tdtu.shop.util.error.InputInvalidException;
+import vn.tdtu.shop.util.error.NotFoundException;
+import vn.tdtu.shop.util.error.ResourceNotFoundException;
 import vn.tdtu.shop.util.request.CreateUserDTO;
 import vn.tdtu.shop.util.request.UpdateProfileDTO;
 import vn.tdtu.shop.util.request.UserUpdateDTO;
@@ -64,7 +67,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") long id) throws InputInvalidException {
 
         if (this.userService.fetchUserById(id) == null) {
-            throw new InputInvalidException("Id không hợp lệ: không tìm thấy user id " + id + ", ...");
+            throw new NotFoundException("Id không hợp lệ: không tìm thấy user id " + id + ", ...");
         }
 
         this.userService.handleDeleteUser(id);
@@ -108,28 +111,29 @@ public class UserController {
 
     @ApiMessage("Cập nhật hồ sơ người dùng thành công")
     @PutMapping("/api/users/update-profile")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResUpdateUserDTO> updateProfile(@Valid @RequestBody UpdateProfileDTO userUpdateDTO)
             throws InputInvalidException, AccessDeniedException {
 
         // Get the authenticated user's email from the security context
         String currentUserEmail = SecurityUtil.getCurrentUserLogin()
-                .orElseThrow(() -> new AccessDeniedException("Không tìm thấy thông tin người dùng hiện tại."));
+                .orElseThrow(() -> new ForbiddenException("Không tìm thấy thông tin người dùng hiện tại đăng nhập."));
 
         // Fetch the authenticated user by email
         User currentUser = userService.handleGetUserByUserName(currentUserEmail);
         if (currentUser == null) {
-            throw new AccessDeniedException("Người dùng hiện tại không tồn tại.");
+            throw new ForbiddenException("Người dùng hiện tại không tồn tại.");
         }
 
         // Check if the authenticated user is the owner of the profile
         if (currentUser.getId() != userUpdateDTO.getId()) {
-            throw new AccessDeniedException("Bạn không có quyền cập nhật hồ sơ của người dùng khác.");
+            throw new ForbiddenException("Bạn không có quyền cập nhật hồ sơ của người dùng khác.");
         }
 
         // Proceed with updating the profile
         User updatedUser = this.userService.handleUpdateProfile(userUpdateDTO);
         if (updatedUser == null) {
-            throw new InputInvalidException(
+            throw new ResourceNotFoundException(
                     "User id " + userUpdateDTO.getId() + " không tồn tại.");
         }
 

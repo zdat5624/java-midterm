@@ -67,7 +67,7 @@ public class BrandService {
             throw new EntityNotFoundException("Không tìm thấy thương hiệu với id: " + id);
         }
 
-        List<Product> products = productRepository.findByCategoryId(id);
+        List<Product> products = productRepository.findByBrandId(id);
         // Xóa từng Product và các CartItem, OrderItem liên quan
         for (Product product : products) {
             productService.deleteProduct(product.getId());
@@ -75,18 +75,7 @@ public class BrandService {
         brandRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deleteCategory(Long id) {
-        if (!brandRepository.existsById(id)) {
-            throw new EntityNotFoundException("Không tìm thấy danh mục với id: " + id);
-        }
-        List<Product> products = productRepository.findByBrandId(id);
-        for (Product product : products) {
-            productService.deleteProduct(product.getId());
-        }
-        // Xóa Category
-        brandRepository.deleteById(id);
-    }
+
 
     private BrandDTO mapToDTO(Brand brand) {
         BrandDTO brandDTO = new BrandDTO();

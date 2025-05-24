@@ -122,7 +122,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsImF1dGhlbnRpY2F0aW9uX29mX3VzZXIiOnsicHJpbmNpcGFsIjp7InBhc3N3b3JkIjpudWxsLCJ1c2VybmFtZSI6InVzZXJAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlt7InJvbGUiOiJST0xFX1VTRVIifV0sImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhY2NvdW50Tm9uTG9ja2VkIjp0cnVlLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImVuYWJsZWQiOnRydWV9LCJjcmVkZW50aWFscyI6bnVsbCwiYXV0aG9yaXRpZXMiOlt7InJvbGUiOiJST0xFX1VTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4Mjc3NDg1NTAsImlhdCI6MTc0MTM0ODU1MH0.QOnAD8S7i2sSWcWSv5KeGnN8mf4gnSBYbYmbRZRWY7qfJWaMEfWgYhR50kyupdRk1gt9uhEFmHPONN6J1rdfzw",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzQzOTA2MTAsImlhdCI6MTc0Nzk5MDYxMCwicm9sZXMiOlsiQURNSU4iXX0.LtjSMdLT0qJa-t6Y9C5FREmze5f5XKSr2vSy-cEl5kF6bTTr7UOHv_bXp6Nfbf94QTEfN1eqGLkLBO72_g6Yyw",
 									"type": "string"
 								}
 							]
@@ -279,7 +279,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user1@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    \"username\": \"admin@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -310,7 +310,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMUBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMUBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlVTRVIifV0sImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhY2NvdW50Tm9uTG9ja2VkIjp0cnVlLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImVuYWJsZWQiOnRydWV9LCJjcmVkZW50aWFscyI6bnVsbCwiYXV0aG9yaXRpZXMiOlt7InJvbGUiOiJVU0VSIn1dLCJkZXRhaWxzIjpudWxsLCJhdXRoZW50aWNhdGVkIjp0cnVlfSwiZXhwIjoxODMxNjE5NDM0LCJpYXQiOjE3NDUyMTk0MzQsInJvbGVzIjpbIlVTRVIiXX0.fY9NGhxnSzKmRQsG7U8obTy9gQmJn3QS2eO9Pih6CuO-yr9PMMMKP5Xigpi-oj1J7YllP7D8bVhgNz7e5jRYRQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzQ0NDAyOTAsImlhdCI6MTc0ODA0MDI5MCwicm9sZXMiOlsiQURNSU4iXX0.C6rH_oLHO9M7WoIhDQ1DOR6HYMvH9sj3esYDZbk4WIj_T_wBCBuHUTNoWWysii-q3WeWuHG7fmyMw4aXRHml_g",
 									"type": "string"
 								}
 							]
@@ -340,7 +340,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Dat123\",\r\n    \"phone\": \"0867532563\",\r\n    \"gender\": \"MALE\",\r\n    \"email\": \"zdat5624232@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Dat123\",\r\n    \"phone\": \"0867532563\",\r\n    \"gender\": \"MALE\",\r\n    \"email\": \"zdat562s4232@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -364,43 +364,13 @@
 					"response": []
 				},
 				{
-					"name": "testmail",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzE2MTgzNDQsImlhdCI6MTc0NTIxODM0NCwicm9sZXMiOlsiQURNSU4iXX0.nmkLljT-tqXzphDCIeaY6_nDBAGPdzJGxHEux0uM4jGcpYx9VhX4kf3eaKePDi_dHFbW4SwUaOXVRANtutCpdw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/email",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"email"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "send mail forgot password",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"zdat56241111@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"email\": \"zdat5624@gmail.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -424,7 +394,7 @@
 					"response": []
 				},
 				{
-					"name": "reset password by token",
+					"name": "reset password by mail token",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -461,7 +431,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyNDlAZ21haWwuY29tIiwiYXV0aGVudGljYXRpb25fb2ZfdXNlciI6eyJwcmluY2lwYWwiOnsicGFzc3dvcmQiOm51bGwsInVzZXJuYW1lIjoidXNlcjQ5QGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiVVNFUiJ9XSwiYWNjb3VudE5vbkV4cGlyZWQiOnRydWUsImFjY291bnROb25Mb2NrZWQiOnRydWUsImNyZWRlbnRpYWxzTm9uRXhwaXJlZCI6dHJ1ZSwiZW5hYmxlZCI6dHJ1ZX0sImNyZWRlbnRpYWxzIjpudWxsLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlVTRVIifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzMwNzYzMzMsImlhdCI6MTc0NjY3NjMzMywicm9sZXMiOlsiVVNFUiJdfQ.DYVmVMgBDWIPcUOD81lKCNj8zL4aWX-PbhgLBH8Ds1WvnkGCARZHHysqU4U0x6cAk1VaTUkLuT-S73XvYUpcQg",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzQ0NDAyOTAsImlhdCI6MTc0ODA0MDI5MCwicm9sZXMiOlsiQURNSU4iXX0.C6rH_oLHO9M7WoIhDQ1DOR6HYMvH9sj3esYDZbk4WIj_T_wBCBuHUTNoWWysii-q3WeWuHG7fmyMw4aXRHml_g",
 									"type": "string"
 								}
 							]
@@ -470,7 +440,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"currentPassword\": \"123456\",\r\n    \"newPassword\": \"1234567\"\r\n}",
+							"raw": "{\r\n    \"currentPassword\": \"123456\",\r\n    \"newPassword\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -602,7 +572,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzE4NzgwODEsImlhdCI6MTc0NTQ3ODA4MSwicm9sZXMiOlsiQURNSU4iXX0.kn_XuCQ6IuxKV_QM9_fXJ0Cx_cmmuXSWFC3DYpHDdtt9DZCM8ai93KNqRaQ8jTurIsW1kFOdFrAhunqrWfngSQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzQ0NjMwNTUsImlhdCI6MTc0ODA2MzA1NSwicm9sZXMiOlsiQURNSU4iXX0.H1VXzN-BnUNpa-JucCw1yH38yXOba1_AJDslSyNEk8bSuxuodM3XW_n0i71md9w6azKJ0FZHfBw_Rph2Pw05Ng",
 									"type": "string"
 								}
 							]
@@ -611,7 +581,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"MacBook Air\",\r\n    \"price\": 10000000,\r\n    \"brandId\": 3,\r\n    \"categoryId\": 3,\r\n    \"shortDescription\": \"Apple M28CPU 10GPU 8GB/256GB\",\r\n    \"detailedDescription\": \"Bền bỉ, tinh xảo với độ hoàn thiện ấn tượng Phát huy truyền thống mỏng nhẹ vốn có của dòng MacBook Air, phiên bản MacBook Air M2 2023 dù mở rộng màn hình lên mức 15 inch nhưng vẫn đảm bảo độ tinh xảo và cao cấp. Từng chi tiết, từng góc cạnh trên thiết bị đều được trau chuốt tỉ mỉ và chế tác từ chất liệu nhôm tái chế bền bỉ mà thân thiện với môi trường. Đặc biệt, sản phẩm có cấu trúc hoạt động không quạt gió, duy trì độ êm ái khi vận hành ngay cả khi chạy tác vụ nặng với khối lượng lớn.\",\r\n    \"images\": [\r\n        \"mac1.jpg\",\r\n        \"mac2.jpg\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"name\": \"MacBook Air\",\r\n    \"price\": 10000000,\r\n    \"brandId\": 3,\r\n    \"categoryId\": 3,\r\n    \"shortDescription\": \"Apple M28CPU 10GPU 8GB/256GB\",\r\n    \"detailedDescription\": \"Bền bỉ, tinh xảo với độ hoàn thiện ấn tượng Phát huy truyền thống mỏng nhẹ vốn có của dòng MacBook Air...\",\r\n    \"images\": [\r\n        \"mac1.jpg\",\r\n        \"mac2.jpg\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -642,7 +612,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/products/1",
+							"raw": "http://localhost:8080/api/products/10000",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -651,7 +621,7 @@
 							"path": [
 								"api",
 								"products",
-								"1"
+								"10000"
 							]
 						}
 					},
@@ -1260,7 +1230,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IkFETUlOIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiY3JlZGVudGlhbHMiOm51bGwsImF1dGhvcml0aWVzIjpbeyJyb2xlIjoiQURNSU4ifV0sImRldGFpbHMiOm51bGwsImF1dGhlbnRpY2F0ZWQiOnRydWV9LCJleHAiOjE4MzE4NzgwODEsImlhdCI6MTc0NTQ3ODA4MSwicm9sZXMiOlsiQURNSU4iXX0.kn_XuCQ6IuxKV_QM9_fXJ0Cx_cmmuXSWFC3DYpHDdtt9DZCM8ai93KNqRaQ8jTurIsW1kFOdFrAhunqrWfngSQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMUBnbWFpbC5jb20iLCJhdXRoZW50aWNhdGlvbl9vZl91c2VyIjp7InByaW5jaXBhbCI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMUBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6W3sicm9sZSI6IlVTRVIifV0sImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhY2NvdW50Tm9uTG9ja2VkIjp0cnVlLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImVuYWJsZWQiOnRydWV9LCJjcmVkZW50aWFscyI6bnVsbCwiYXV0aG9yaXRpZXMiOlt7InJvbGUiOiJVU0VSIn1dLCJkZXRhaWxzIjpudWxsLCJhdXRoZW50aWNhdGVkIjp0cnVlfSwiZXhwIjoxODM0Mzg4MDM1LCJpYXQiOjE3NDc5ODgwMzUsInJvbGVzIjpbIlVTRVIiXX0.KIvfdOSEWxn8falEyQ4FD4vGSVEyKHWJNKLV9tAKTpC7MjpxpWqKaCcsXQWOzyi4_PpNXuRwtA7O-ltxT1srRQ",
 									"type": "string"
 								}
 							]

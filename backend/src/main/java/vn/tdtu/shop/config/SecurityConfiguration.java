@@ -48,19 +48,14 @@ public class SecurityConfiguration {
         http
                 .csrf(c -> c.disable())
                 .cors(Customizer.withDefaults())
-                // .authorizeHttpRequests(
-                // authz -> authz
+                .authorizeHttpRequests(
+                        authz -> authz
 
-                // // .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                // // .requestMatchers(
-                // // "/",
-                // // "/uploads/**",
-                // // "/api/auth/**"
+                                .anyRequest().permitAll()
 
-                // // ).permitAll()
-
-                // )
+                )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint))
                 .exceptionHandling(

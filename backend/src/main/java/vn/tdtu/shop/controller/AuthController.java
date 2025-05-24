@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import vn.tdtu.shop.util.response.ResCreateUserDTO;
 import vn.tdtu.shop.util.response.ResLoginDTO;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     final private AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -47,7 +49,7 @@ public class AuthController {
     }
 
     @ApiMessage("Đăng nhập thành công")
-    @PostMapping("/api/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 
         // Nạp input gồm username/password vào Security
@@ -71,10 +73,9 @@ public class AuthController {
                     currentUserDB.getName(),
                     currentUserDB.getRole(),
                     currentUserDB.getAvatar(),
-                    currentUserDB.getGender(),         
+                    currentUserDB.getGender(),
                     currentUserDB.getPhone(),
-                    currentUserDB.getAddress()
-                    );
+                    currentUserDB.getAddress());
             res.setUser(userLogin);
         }
 
@@ -82,7 +83,7 @@ public class AuthController {
     }
 
     @ApiMessage("Lấy thông tin tài khoản thành công")
-    @GetMapping("/api/auth/account")
+    @GetMapping("/account")
     public ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
 
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
@@ -107,7 +108,7 @@ public class AuthController {
     }
 
     @ApiMessage("Đăng ký tài khoản thành công")
-    @PostMapping("/api/auth/register")
+    @PostMapping("/register")
     public ResponseEntity<ResCreateUserDTO> register(@Valid @RequestBody RegisterDTO registerDTO)
             throws InputInvalidException {
         boolean isEmailExist = this.userService.isEmailExist(registerDTO.getEmail());
@@ -141,7 +142,7 @@ public class AuthController {
     }
 
     @ApiMessage("Mã xác nhận đã được gửi đến email của bạn.")
-    @PostMapping("/api/auth/forgot-password")
+    @PostMapping("/forgot-password")
     public ResponseEntity<Void> requestPasswordReset(@RequestBody EmailRequest request)
             throws InputInvalidException {
         forgotPasswordService.requestPasswordReset(request.getEmail());
@@ -149,7 +150,7 @@ public class AuthController {
     }
 
     @ApiMessage("Đổi mật khẩu thành công")
-    @PostMapping("/api/auth/reset-password")
+    @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request)
             throws InputInvalidException {
         forgotPasswordService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
@@ -157,7 +158,7 @@ public class AuthController {
     }
 
     @ApiMessage("Đổi mật khẩu thành công")
-    @PostMapping("/api/auth/change-password")
+    @PostMapping("/change-password")
     public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request)
             throws InputInvalidException {
         String email = SecurityUtil.getCurrentUserLogin()

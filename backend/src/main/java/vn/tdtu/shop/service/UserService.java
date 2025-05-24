@@ -24,6 +24,7 @@ import vn.tdtu.shop.util.constant.GenderEnum;
 import vn.tdtu.shop.util.constant.RoleEnum;
 import vn.tdtu.shop.util.error.InputInvalidException;
 import vn.tdtu.shop.util.error.NotFoundException;
+import vn.tdtu.shop.util.error.ResourceNotFoundException;
 import vn.tdtu.shop.util.request.CreateUserDTO;
 import vn.tdtu.shop.util.request.UpdateProfileDTO;
 import vn.tdtu.shop.util.request.UserFilterRequest;
@@ -79,7 +80,7 @@ public class UserService {
 
     public User fetchUserById(long id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng với ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng với ID: " + id));
     }
 
     public User handleGetUserByUserName(String username) {
